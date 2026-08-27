@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngee Ann City — How to Play?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep: #0E2233;
+    --navy-mid: #16324A;
+    --navy-line: #2F5D73;
+    --cyan-glow: #7FE7EA;
+    --paper: #F3ECDA;
+    --paper-shade: #E7DEC7;
+    --ink: #22303A;
+    --ink-soft: #4B5A62;
+    --amber: #E3A23E;
+    --c-r: #6FA97C;
+    --c-i: #C0603B;
+    --c-c: #4E7FBB;
+    --c-o: #4FA391;
+    --c-road: #7A8590;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Source Serif 4', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    position: relative;
+    background: url('/static/backgrounds/mxj_files-moon-15608.gif') center center / cover no-repeat fixed;
+    color: var(--paper);
+    font-family: var(--font-body);
+    height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before{
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(rgba(2, 6, 16, 0.34), rgba(2, 6, 16, 0.56));
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .top-panel{
+    flex: 0 0 auto;
+    background: rgba(9, 24, 38, 0.78);
+    border: 1px solid rgba(127, 231, 234, 0.22);
+    border-radius: 10px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.28);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 24px 24px 18px;
+  }
+
+  .content-panel{
+    flex: 1 1 auto;
+    min-height: 0;
+    background: rgba(9, 24, 38, 0.72);
+    border: 1px solid rgba(127, 231, 234, 0.18);
+    border-radius: 10px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.24);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  header{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--navy-line);
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--cyan-glow);
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 4.5vw, 42px);
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--paper);
+  }
+
+  .back-link{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--paper-shade);
+    border: 1px solid var(--navy-line);
+    padding: 8px 14px;
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .back-link:hover{ border-color: var(--cyan-glow); color: var(--cyan-glow); }
+
+  /* ── Zoning legend nav ──────────────────────────────── */
+  .legend-label{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #B7D8DC;
+    text-shadow: 0 1px 3px rgba(2, 6, 16, 0.45);
+    margin: 0 0 10px;
+  }
+
+  nav.legend{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+  }
+
+  .zbtn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-line);
+    border-radius: 4px;
+    padding: 10px 14px;
+    cursor:pointer;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--paper-shade);
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .zbtn:hover{ border-color: var(--cyan-glow); transform: translateY(-1px); }
+  .zbtn.active{
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--cyan-glow);
+    box-shadow: 0 0 0 1px var(--cyan-glow), 0 6px 18px rgba(0,0,0,.35);
+  }
+
+  .swatch{
+    width: 22px; height: 22px;
+    border-radius: 3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 12px;
+    color: #0E2233;
+    flex-shrink:0;
+  }
+  .swatch.doc{ background: var(--paper-shade); }
+  .swatch.r{ background: var(--c-r); }
+  .swatch.i{ background: var(--c-i); }
+  .swatch.c{ background: var(--c-c); }
+  .swatch.o{ background: var(--c-o); }
+  .swatch.road{ background: var(--c-road); }
+  .swatch.wrench{ background: var(--amber); }
+
+  /* ── Permit card ────────────────────────────────────── */
+  .permit{
+    position: relative;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 34px 36px 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    overflow:hidden;
+  }
+  .permit::before{
+    content:"";
+    position:absolute; inset:10px;
+    border: 1px solid rgba(34,48,58,.18);
+    border-radius: 3px;
+    pointer-events:none;
+  }
+
+  .permit-head{
+    display:flex;
+    justify-content: space-between;
+    align-items:flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .permit-title{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0;
+    color: var(--ink);
+  }
+  .permit-code{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: .08em;
+  }
+
+  .stamp{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--amber);
+    border: 2px solid var(--amber);
+    border-radius: 4px;
+    padding: 6px 10px;
+    transform: rotate(-6deg);
+    white-space:nowrap;
+    text-transform: uppercase;
+  }
+
+  .permit p{
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+
+  .permit ul{
+    margin: 0 0 16px;
+    padding-left: 20px;
+  }
+  .permit li{
+    font-size: 15.5px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  .rule-row{
+    display:flex;
+    gap: 10px;
+    align-items:flex-start;
+    padding: 10px 0;
+    border-top: 1px dashed rgba(34,48,58,.2);
+  }
+  .rule-row:first-of-type{ border-top: none; }
+  .rule-row .tag{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    color: #fff;
+    flex-shrink:0;
+    margin-top: 2px;
+  }
+  .tag.r{ background: var(--c-r); }
+  .tag.i{ background: var(--c-i); }
+  .tag.c{ background: var(--c-c); }
+  .tag.o{ background: var(--c-o); }
+  .tag.road{ background: var(--c-road); color:#fff; }
+
+  /* mini adjacency diagram */
+  .mini-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 4px;
+    margin: 6px 0 20px;
+  }
+  .mini-cell{
+    border-radius: 3px;
+    background: #DED4B8;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(34,48,58,.35);
+    border: 1px solid rgba(34,48,58,.12);
+  }
+  .mini-cell.filled{ color:#fff; }
+  .mini-cell.fr{ background: var(--c-r); }
+  .mini-cell.fi{ background: var(--c-i); }
+  .mini-cell.fc{ background: var(--c-c); }
+  .mini-cell.fo{ background: var(--c-o); }
+  .mini-cell.froad{ background: var(--c-road); }
+  .mini-cell.ring{ outline: 3px solid var(--amber); outline-offset: -3px; }
+
+  .two-col{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 640px){
+    body{
+      height: auto;
+      min-height: 100vh;
+      overflow: auto;
+    }
+    .wrap{
+      height: auto;
+      min-height: 100vh;
+      padding: 20px 16px 32px;
+      display: block;
+    }
+    .two-col{ grid-template-columns: 1fr; }
+    .permit{ padding: 24px 20px; }
+    .top-panel{ padding: 20px 18px 16px; }
+    .content-panel{
+      padding: 18px;
+      overflow: visible;
+    }
+  }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation: rise .25s ease; }
+  @keyframes rise{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;} }
+
+  .stat-strip{
+    display:flex;
+    gap: 18px;
+    flex-wrap:wrap;
+    margin: 4px 0 20px;
+    padding: 12px 14px;
+    background: var(--paper-shade);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .stat-strip b{ color: var(--ink); }
+
+  footer{
+    margin-top: 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #C7DADF;
+    text-align:center;
+    letter-spacing: .06em;
+    text-shadow: 0 1px 3px rgba(2, 6, 16, 0.45);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .panel.active{ animation: none; }
+    .zbtn{ transition:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="top-panel">
+  <header>
+    <div>
+      <p class="eyebrow">Instructions — Ngee Ann City</p>
+      <h1>How to Play?</h1>
+    </div>
+    <a class="back-link" href="/" onclick="sessionStorage.setItem('jumpToMainMenu', '1')">&larr; Back to menu</a> <!-- Go back to the main menu -->
+  </header>
+
+  <p class="legend-label">Select each boxes to view its rules</p>
+  <nav class="legend" id="legend">
+    <button class="zbtn active" data-panel="overview"><span class="swatch doc">i</span>Overview</button>
+    <button class="zbtn" data-panel="arcade"><span class="swatch doc" style="background:var(--cyan-glow)">A</span>Arcade</button>
+    <button class="zbtn" data-panel="challenge"><span class="swatch doc" style="background:#E3A23E">C</span>Challenge</button>
+    <button class="zbtn" data-panel="bonus"><span class="swatch doc" style="background:#D8E6A5">B</span>Bonus Tasks</button>
+    <button class="zbtn" data-panel="freeplay"><span class="swatch doc" style="background:#B7D8DC">F</span>Free Play</button>
+    <button class="zbtn" data-panel="r"><span class="swatch r">R</span>Residential</button>
+    <button class="zbtn" data-panel="i"><span class="swatch i">I</span>Industry</button>
+    <button class="zbtn" data-panel="c"><span class="swatch c">C</span>Commercial</button>
+    <button class="zbtn" data-panel="o"><span class="swatch o">O</span>Park</button>
+    <button class="zbtn" data-panel="road"><span class="swatch road">*</span>Road</button>
+    <button class="zbtn" data-panel="controls"><span class="swatch wrench">S</span>Controls</button>
+  </nav>
+  </section>
+
+  <section class="content-panel">
+  <div class="permit">
+
+    <!-- OVERVIEW -->
+    <section class="panel active" id="panel-overview">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Welcome, City Planner</h2>
+        </div>
+        <div class="stamp">Read First</div>
+      </div>
+      <p>Ngee Ann City hands you an empty grid and a stack of building permits. Every tile you place changes the value of the tiles around it — the whole game is adjacency arithmetic dressed up as a skyline.</p>
+      <p>Three zoning charters govern the city: <strong>Arcade</strong>, a tight resource sprint; <strong>Challenge</strong>, an event-driven survival variant of Arcade; and <strong>Free Play</strong>, a slower economic simulation. Pick a charter from the legend above, or jump straight to a building's scoring rules.</p>
+      <div class="stat-strip">
+        <span><b>5</b> building types</span>
+        <span><b>3</b> game modes</span>
+        <span><b>Top 10</b> leaderboard per mode</span>
+      </div>
+      <p>Arcade and Challenge also share rotating <strong>Bonus Tasks</strong> that can award extra score or coins when you finish them before they expire.</p>
+      <p>Every building is colour-coded the same way in the manual as it is on the board — match the swatch, learn the rule.</p>
+    </section>
+
+    <!-- ARCADE -->
+    <section class="panel" id="panel-arcade">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Arcade Mode</h2>
+        </div>
+        <div class="stamp">16 Coins</div>
+      </div>
+      <ul>
+        <li>Start with <strong>16 coins</strong> on a <strong>20&times;20 grid</strong>.</li>
+        <li>Each turn, the office offers you <strong>1 of 2</strong> randomly drawn building types — you don't get to pick freely.</li>
+        <li>Your first placement can go anywhere. Every placement after that must be <strong>adjacent</strong> to an existing building.</li>
+        <li>Placing or demolishing a building costs <strong>1 coin</strong>.</li>
+        <li>The city keeps generating coin income each turn based on what's built.</li>
+        <li>Game over when the board is completely full, or when you run out of coins.</li>
+      </ul>
+      <p>Because every tile is forced by the draw, Arcade rewards planning two moves ahead: know where an Industry tile would hurt your Residential score before it's offered to you. Bonus Tasks can also appear during Arcade, giving you timed side goals for extra coins or score.</p>
+    </section>
+
+    <!-- CHALLENGE -->
+    <section class="panel" id="panel-challenge">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Challenge Mode</h2>
+        </div>
+        <div class="stamp">Unpredictable</div>
+      </div>
+      <ul>
+        <li>Challenge uses the same <strong>20&times;20 grid</strong>, adjacency placement rule, and random <strong>1 of 2</strong> building draw as Arcade.</li>
+        <li>You start with <strong>16 coins</strong>, but <strong>building placement cost rises over time</strong>. It starts at 1 coin and increases by <strong>1 more every 5 turns</strong>.</li>
+        <li>After <strong>turn 5</strong>, random city events can begin. Events do not happen every turn, and there is a short cooldown between them.</li>
+        <li>Events can be <strong>immediate</strong>, <strong>scheduled</strong>, or <strong>temporary</strong>. Scheduled events warn you first, then trigger a few turns later. Temporary events last for several turns before ending.</li>
+        <li>Challenge ends when the board is full or when you no longer have enough coins to pay the next placement cost.</li>
+      </ul>
+      <div class="rule-row"><span class="tag i">!</span><span><strong>Economic events:</strong> Construction Shortage raises building costs for a few turns, Economic Recession cuts coin income, and Maintenance Surge increases upkeep.</span></div>
+      <div class="rule-row"><span class="tag c">!</span><span><strong>Disasters:</strong> Earthquakes and fires can destroy buildings immediately, while tornadoes are announced in advance and strike a few turns later.</span></div>
+      <div class="rule-row"><span class="tag o">+</span><span><strong>Positive events:</strong> Emergency Relief Grants can award extra coins when they appear.</span></div>
+      <p style="color:var(--ink-soft); font-size:14px;">Challenge also includes milestone rewards such as building enough Residential tiles or reaching a larger city size, so smart survival and city growth both matter.</p>
+    </section>
+
+    <!-- BONUS TASKS -->
+    <section class="panel" id="panel-bonus">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Bonus Tasks</h2>
+        </div>
+        <div class="stamp">Timed Goals</div>
+      </div>
+      <ul>
+        <li>Bonus Tasks appear in <strong>Arcade</strong> and <strong>Challenge</strong>.</li>
+        <li>You receive them in <strong>batches of 5</strong>. A new batch appears only after every task in the current batch has been completed or expired.</li>
+        <li>Each task has a <strong>turn limit</strong>, a progress tracker, and a reward such as <strong>bonus score</strong> or <strong>bonus coins</strong>.</li>
+        <li>Progress is based on your real board state, so tasks can count total buildings of one type, mixed city growth, or the size of your largest connected Road network.</li>
+        <li>Completed tasks stay in the completed list, while expired tasks end with no reward.</li>
+      </ul>
+      <p class="permit-title" style="font-size:17px; margin-top:22px;">Common Task Types</p>
+      <div class="rule-row"><span class="tag r">R</span><span><strong>Building-count tasks:</strong> examples include building 5 Residential in 8 turns, 3 Industry in 6 turns, 4 Parks in 7 turns, or 4 Commercial in 8 turns.</span></div>
+      <div class="rule-row"><span class="tag road">*</span><span><strong>Road tasks:</strong> some missions ask for a connected Road network of at least 6 or 12 tiles.</span></div>
+      <div class="rule-row"><span class="tag c">Mix</span><span><strong>Mixed tasks:</strong> later goals may ask for balanced Industry and Commercial growth, or at least 3 each of Residential, Industry, Commercial, and Park.</span></div>
+      <p style="color:var(--ink-soft); font-size:14px;">Use the in-game Bonus Tasks panel to switch between active and completed goals, watch the progress bar, and decide when a reward is worth changing your building plan.</p>
+    </section>
+
+    <!-- FREE PLAY -->
+    <section class="panel" id="panel-freeplay">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Free Play Mode</h2>
+        </div>
+        <div class="stamp">Unlimited</div>
+      </div>
+      <ul>
+        <li>Unlimited coins. Build any type, anywhere, from the very first turn.</li>
+        <li>Starts small — a <strong>5&times;5 grid</strong>.</li>
+        <li>Building on a <strong>border cell</strong> expands the grid outward, up to <strong>two expansions</strong> total.</li>
+        <li>Every turn, the office calculates city-wide <strong>profit</strong> and <strong>upkeep</strong> (see the Economy figures below).</li>
+        <li>If upkeep outpaces profit for <strong>20 consecutive turns</strong>, the city is declared insolvent and the game ends.</li>
+      </ul>
+      <p class="permit-title" style="font-size:17px; margin-top:22px;">Upkeep &amp; Profit Ledger</p>
+      <div class="rule-row"><span class="tag r">R</span><span>+1 profit each. Every connected Residential cluster costs 1 upkeep, regardless of its size.</span></div>
+      <div class="rule-row"><span class="tag i">I</span><span>+2 profit, &minus;1 upkeep, per building.</span></div>
+      <div class="rule-row"><span class="tag c">C</span><span>+3 profit, &minus;2 upkeep, per building.</span></div>
+      <div class="rule-row"><span class="tag o">O</span><span>No profit. &minus;1 upkeep per Park.</span></div>
+      <div class="rule-row"><span class="tag road">*</span><span>No profit. Any Road segment that isn't connected to another Road costs &minus;1 upkeep.</span></div>
+    </section>
+
+    <!-- RESIDENTIAL -->
+    <section class="panel" id="panel-r">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Residential (R)</h2>
+        </div>
+        <div class="stamp" style="border-color:var(--c-r); color:var(--c-r);">Neighbourly</div>
+      </div>
+      <div class="two-col">
+        <div>
+          <p><strong>If adjacent to any Industry:</strong> the building is unhappy about the noise. It scores a flat <strong>1 point total</strong>, no matter what else surrounds it.</p>
+          <p><strong>Otherwise:</strong> it scores <strong>+1</strong> for every adjacent Residential or Commercial tile, and <strong>+2</strong> for every adjacent Park.</p>
+        </div>
+        <div>
+          <div class="mini-grid">
+            <div class="mini-cell"></div><div class="mini-cell filled fo">O</div><div class="mini-cell"></div>
+            <div class="mini-cell filled fc">C</div><div class="mini-cell filled fr ring">R</div><div class="mini-cell filled fr">R</div>
+            <div class="mini-cell"></div><div class="mini-cell"></div><div class="mini-cell"></div>
+          </div>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:-8px;">Ringed R scores 1+1+2 = <strong>4</strong> (Commercial, Residential, Park neighbours).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDUSTRY -->
+    <section class="panel" id="panel-i">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Industry (I)</h2>
+        </div>
+        <div class="stamp" style="border-color:var(--c-i); color:var(--c-i);">City-wide</div>
+      </div>
+      <p>Industry doesn't care about its neighbours. Every Industry tile scores <strong>+1 for every other Industry tile in the entire city</strong> — placement is about volume, not location.</p>
+      <p style="color:var(--ink-soft); font-size:14px;">Trade-off: stacking Industry maximises its own score but poisons any nearby Residential down to 1 point.</p>
+    </section>
+
+    <!-- COMMERCIAL -->
+    <section class="panel" id="panel-c">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Commercial (C)</h2>
+        </div>
+        <div class="stamp" style="border-color:var(--c-c); color:var(--c-c);">Clustered</div>
+      </div>
+      <div class="two-col">
+        <div><p>Each Commercial tile scores <strong>+1 for every adjacent Commercial tile</strong>. Shopping districts reward clustering.</p></div>
+        <div>
+          <div class="mini-grid">
+            <div class="mini-cell"></div><div class="mini-cell filled fc">C</div><div class="mini-cell"></div>
+            <div class="mini-cell filled fc">C</div><div class="mini-cell filled fc ring">C</div><div class="mini-cell filled fc">C</div>
+            <div class="mini-cell"></div><div class="mini-cell filled fc">C</div><div class="mini-cell"></div>
+          </div>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:-8px;">Ringed C scores <strong>4</strong> — one point per orthogonal Commercial neighbour.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARK -->
+    <section class="panel" id="panel-o">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Park (O)</h2>
+        </div>
+        <div class="stamp" style="border-color:var(--c-o); color:var(--c-o);">Green Space</div>
+      </div>
+      <p>Each Park scores <strong>+1 for every adjacent Park tile</strong>. Its bigger contribution is indirect: it's the only tile that gives Residential a <strong>+2</strong> bonus instead of +1, so a Park at the centre of an R cluster does double duty.</p>
+    </section>
+
+    <!-- ROAD -->
+    <section class="panel" id="panel-road">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Road (*)</h2>
+        </div>
+        <div class="stamp" style="border-color:var(--c-road); color:var(--c-road);">Infrastructure</div>
+      </div>
+      <p>Roads score along the row: each Road tile scores <strong>+1 for every connected Road in the same row</strong>. Build a straight, unbroken row of roads to make each segment count the whole run.</p>
+      <p style="color:var(--ink-soft); font-size:14px;">In Free Play, disconnected Road segments also cost 1 upkeep — a dead-end road is a liability twice over.</p>
+    </section>
+
+    <!-- CONTROLS -->
+    <section class="panel" id="panel-controls">
+      <div class="permit-head">
+        <div>
+          <h2 class="permit-title">Controls, Saves &amp; Leaderboard</h2>
+        </div>
+        <div class="stamp">Front Office</div>
+      </div>
+      <ul>
+        <li><strong>Place a building:</strong> click any highlighted valid cell, then choose a building type.</li>
+        <li><strong>Demolish:</strong> select an occupied cell and confirm removal (costs 1 coin in Arcade and Challenges).</li>
+        <li><strong>Bonus Tasks panel:</strong> in Arcade and Challenge, open the Bonus Tasks tab in-game to view active goals, completed goals, and batch progress.</li>
+        <li><strong>Challenge event log:</strong> in Challenge mode, watch the event feed for warnings, active temporary effects, and disaster history.</li>
+        <li><strong>Save:</strong> name your city and store the current board to continue later.</li>
+        <li><strong>Load:</strong> pick a saved city from the list to resume it.</li>
+        <li><strong>Leaderboard:</strong> when a game ends, if your score beats the lowest of the top 10 for that mode, you'll be asked to submit your name.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>NGEE ANN CITY MUNICIPAL PLANNING OFFICE &middot; FORM ZN-1 &middot; ALL PERMITS SUBJECT TO ADJACENCY REVIEW</footer>
+  </section>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.zbtn');
+  const panels = document.querySelectorAll('.panel');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+<script src="/static/music.js"></script>
+</body>
+</html>

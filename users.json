@@ -1,0 +1,39 @@
+{
+    "users": [
+        {
+            "user_id": 1,
+            "username": "shinchan",
+            "password": "shinchan123",
+            "display_name": "Shinchan",
+            "avatar_filename": "user-1.png"
+        },
+        {
+            "user_id": 2,
+            "username": "theresa",
+            "password": "theresa",
+            "display_name": "high0nc0cane",
+            "avatar_filename": "user-2.png"
+        },
+        {
+            "user_id": 3,
+            "username": "mbappe",
+            "password": "123123",
+            "display_name": "Mbappe",
+            "avatar_filename": "user-3.jpg"
+        },
+        {
+            "user_id": 4,
+            "username": "haoying",
+            "password": "haoying",
+            "display_name": "Haoying",
+            "avatar_filename": "user-4.png"
+        },
+        {
+            "user_id": 5,
+            "username": "XavierAng",
+            "password": "321321",
+            "display_name": "Xavier",
+            "avatar_filename": "user-5.png"
+        }
+    ]
+}

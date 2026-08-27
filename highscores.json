@@ -1,0 +1,139 @@
+[
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 3038,
+    "mode": "freeplay",
+    "turns": 128
+  },
+  {
+    "user_id": 5,
+    "username": "XavierAng",
+    "display_name": "Xavier",
+    "name": "Xavier",
+    "score": 20,
+    "mode": "freeplay",
+    "turns": 14
+  },
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 15,
+    "mode": "freeplay",
+    "turns": 11
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "name": "Haoying",
+    "score": 15,
+    "mode": "freeplay",
+    "turns": 11
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 11,
+    "mode": "freeplay",
+    "turns": 13
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 211,
+    "mode": "challenge",
+    "turns": 40
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 141,
+    "mode": "challenge",
+    "turns": 6
+  },
+  {
+    "user_id": 5,
+    "username": "XavierAng",
+    "display_name": "Xavier",
+    "name": "Xavier",
+    "score": 102,
+    "mode": "challenge",
+    "turns": 26
+  },
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 11,
+    "mode": "challenge",
+    "turns": 11
+  },
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 9,
+    "mode": "challenge",
+    "turns": 12
+  },
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 1242,
+    "mode": "arcade",
+    "turns": 83
+  },
+  {
+    "user_id": 5,
+    "username": "XavierAng",
+    "display_name": "Xavier",
+    "name": "Xavier",
+    "score": 137,
+    "mode": "arcade",
+    "turns": 41
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 88,
+    "mode": "arcade",
+    "turns": 8
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 71,
+    "mode": "arcade",
+    "turns": 27
+  },
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 31,
+    "mode": "arcade",
+    "turns": 20
+  }
+]

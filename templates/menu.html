@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngee Ann City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Daphne: shared Google fonts keep the menu typography consistent across account, mode, and leaderboard screens. -->
+  <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@300;400;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    window.currentUser = {{ current_user_public | tojson }};
+  </script>
+</head>
+<body class="menu-body">
+
+  <!-- ── Background Scene ──────────────────────────────────────── -->
+  <!-- Theresa: animated background art keeps the menu visually lively while the player navigates between screens. -->
+  <div class="scene-container">
+    <img class="scene-image" src="/static/backgrounds/mxj_files-moon-15608.gif" alt="Animated moonlit city background">
+  </div>
+
+  <!-- ── Back Button ────────────────────────────────────────────── -->
+  <button id="back-btn" class="back-btn hidden" onclick="goBack()">&larr; Back to menu</button>
+
+  <!-- ── Screen: Title ─────────────────────────────────────────── -->
+  <div id="screen-title" class="screen screen-active" onclick="advanceFromTitle()">
+    <div class="title-block title-centered">
+      <h1 class="game-title">Ngee Ann<br>City</h1>
+      <p class="game-subtitle">a city–building strategy game</p>
+    </div>
+    <p class="press-any">Press any Button</p>
+  </div>
+
+  <!-- ── Screen: Account Menu ─────────────────────────────────── -->
+  <div id="screen-account" class="screen">
+    <div class="title-block">
+      <h1 class="game-title">Ngee Ann<br>City</h1>
+      <p class="game-subtitle">a city–building strategy game</p>
+    </div>
+    <div class="account-shell">
+      <div class="account-card">
+        <p class="account-kicker">Account Menu</p>
+        <h2 id="account-title" class="account-title">Log in or make a new account</h2>
+        <p id="account-status" class="account-status">Choose login or create a new account to continue.</p>
+
+        <div class="account-actions" id="account-actions">
+          <button class="pill-btn account-action-btn" onclick="showAccountPanel('login')">Login</button>
+          <button class="pill-btn account-action-btn" onclick="showAccountPanel('create')">Create Account</button>
+          <button class="pill-btn account-action-btn secondary-action" onclick="exitAccount()">Exit</button>
+        </div>
+
+        <form id="login-form" class="account-form hidden" onsubmit="submitLogin(event)">
+          <div class="form-group">
+            <label class="account-label" for="login-username">Username</label>
+            <input id="login-username" class="account-input" type="text" minlength="3" maxlength="15" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label class="account-label" for="login-password">Password</label>
+            <input id="login-password" class="account-input" type="password" minlength="6" autocomplete="current-password">
+          </div>
+          <p id="login-message" class="account-message" aria-live="polite"></p>
+          <div class="account-form-actions">
+            <button type="submit" class="pill-btn account-action-btn">Login</button>
+            <button type="button" class="pill-btn account-cancel-btn" onclick="showAccountMenu()">Back</button>
+          </div>
+        </form>
+
+        <form id="create-form" class="account-form hidden" onsubmit="submitCreateAccount(event)">
+          <!-- Daphne: the Display Name field lets players enter the nickname that appears in saved progress and highscores. -->
+          <div class="form-group">
+            <label class="account-label" for="display-name-input">Display Name</label>
+            <input id="display-name-input" class="account-input" type="text" maxlength="20" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="account-label" for="create-username">Username</label>
+            <input id="create-username" class="account-input" type="text" minlength="3" maxlength="15" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label class="account-label" for="create-password">Password</label>
+            <input id="create-password" class="account-input" type="password" minlength="6" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label class="account-label" for="confirm-password">Confirm Password</label>
+            <input id="confirm-password" class="account-input" type="password" minlength="6" autocomplete="new-password">
+          </div>
+          <p id="create-message" class="account-message" aria-live="polite"></p>
+          <div class="account-form-actions">
+            <button type="submit" class="pill-btn account-action-btn">Create Account</button>
+            <button type="button" class="pill-btn account-cancel-btn" onclick="showAccountMenu()">Back</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Screen: Main Menu ─────────────────────────────────────── -->
+  <div id="screen-main" class="screen">
+    <div class="title-block">
+      <h1 class="game-title">Ngee Ann<br>City</h1>
+      <p class="game-subtitle">a city–building strategy game</p>
+    </div>
+    <div class="current-user-display" id="current-user-display">
+      <img id="current-user-avatar" class="current-user-avatar hidden" alt="Current user profile picture">
+      <div class="current-user-meta">
+        Logged in as: <span id="current-user-label"></span>
+      </div>
+      <input id="avatar-upload-input" type="file" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" class="hidden" onchange="uploadProfilePicture(event)">
+      <button type="button" class="current-user-avatar-btn" onclick="triggerAvatarUpload()">Change Picture</button>
+    </div>
+    <!-- Daphne: the main menu groups the game's primary actions into one clear navigation area for easier player flow. -->
+    <nav class="pill-menu">
+      <button class="pill-btn" id="mbtn-0" onclick="showScreen('screen-mode')">New Game</button>
+      <button class="pill-btn" id="mbtn-1" onclick="openLoadModal()">Load Game</button>
+      <button class="pill-btn" id="mbtn-2" onclick="showLeaderboard()">Leaderboard</button>
+      <button class="pill-btn" id="mbtn-3" onclick="goToInstructions()">How to play</button>
+      <button class="pill-btn" id="mbtn-4" onclick="switchAccount()">Switch Account</button>
+    </nav>
+  </div>
+
+  <!-- ── Screen: Mode Select ───────────────────────────────────── -->
+  <div id="screen-mode" class="screen">
+    <div class="title-block">
+      <h1 class="game-title">Ngee Ann<br>City</h1>
+      <p class="game-subtitle">a city–building strategy game</p>
+    </div>
+    <!-- Daphne: these mode cards use the same visual pattern so players can compare modes quickly and choose where to start. -->
+    <div class="mode-cards">
+      <div class="mode-card" onclick="startGame('arcade')">
+        <p class="mode-tagline">Limited-resource strategy</p>
+        <h2 class="mode-name">Arcade Mode</h2>
+        <p class="mode-desc">Start with 16 coins. Each turn, pick 1 of 2 random buildings. Build wisely—when your coins run out, the game ends. Can you build a high-scoring city before you run dry?</p>
+      </div>
+      <div class="mode-card" onclick="startGame('freeplay')">
+        <p class="mode-tagline">Build at your own pace</p>
+        <h2 class="mode-name">Free Play Mode</h2>
+        <p class="mode-desc">Unlimited coins. Build any building anywhere. Your city expands as you place buildings on the edge. Manage profit and upkeep each turn—survive 20 losing turns and it's game over. No time pressure, just strategy.</p>
+      </div>
+      <div class="mode-card challenge-mode-card" onclick="startGame('challenge')">
+        <p class="mode-tagline">Unpredictable events and limited resources</p>
+        <h2 class="mode-name">Challenges</h2>
+        <p class="mode-desc">Face unpredictable city events and adapt your strategy to survive. Challenges uses Arcade rules, but after every 5 turns all building costs increase by 1 coin, and taxes, disasters, and temporary economic effects can change your plans after turn 5.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Screen: Leaderboard ───────────────────────────────────── -->
+  <div id="screen-leaderboard" class="screen">
+    <div class="lb-layout">
+      <!-- Daphne: the tab and view controls keep leaderboard navigation readable while separating global and personal scores. -->
+      <div class="lb-left-panel">
+        <div class="lb-tabs">
+          <button class="lb-tab lb-tab-active" id="tab-arcade" onclick="switchTab('arcade')">Arcade</button>
+          <button class="lb-tab" id="tab-freeplay" onclick="switchTab('freeplay')">Free Play</button>
+          <button class="lb-tab" id="tab-challenge" onclick="switchTab('challenge')">Challenges</button>
+        </div>
+        <div class="lb-view-toggle">
+          <button class="lb-view-btn lb-view-active" id="view-global" onclick="switchView('global')">Global</button>
+          <button class="lb-view-btn" id="view-mine" onclick="switchView('mine')">My scores</button>
+        </div>
+        <h2 class="lb-heading">Leaderboards</h2>
+        <div class="lb-info-box">
+          <p id="lb-info-text">Top 10 all-time rankings. See the best cities built so far.</p>
+        </div>
+      </div>
+      <div class="lb-right-panel" id="lb-entries">
+        <p class="empty-state">Loading…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal: Load Game ──────────────────────────────────────── -->
+  <div id="loadModal" class="modal-overlay hidden" onclick="closeModal(event,'loadModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Load Game</h2>
+        <button class="modal-close" onclick="closeModalById('loadModal')">&#10005;</button>
+      </div>
+      <div id="savesList" class="saves-list">
+        <p class="empty-state">Loading…</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="deleteSaveModal" class="modal-overlay hidden" onclick="closeModal(event,'deleteSaveModal')">
+    <div class="modal-box modal-confirm">
+      <div class="modal-header">
+        <h2>Delete Save</h2>
+      </div>
+      <p class="modal-body-text" id="deleteSaveMessage">Do you want to delete this save file? This cannot be undone.</p>
+      <div class="confirm-actions">
+        <button type="button" class="btn-cancel" onclick="closeDeleteSaveModal()">Cancel</button>
+        <button type="button" class="save-delete-btn confirm-delete-btn" onclick="confirmDeleteSave()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="avatarCropModal" class="modal-overlay hidden" onclick="closeModal(event,'avatarCropModal')">
+    <div class="modal-box modal-avatar-crop">
+      <div class="modal-header">
+        <h2>Crop Profile Picture</h2>
+      </div>
+      <p class="modal-body-text">Drag the image and use the slider to fit it nicely into the circle.</p>
+      <div class="avatar-crop-shell">
+        <div class="avatar-crop-frame">
+          <img id="avatarCropImage" class="avatar-crop-image" alt="Avatar crop preview">
+          <div class="avatar-crop-mask"></div>
+        </div>
+      </div>
+      <label class="account-label" for="avatarZoomRange">Zoom</label>
+      <input id="avatarZoomRange" class="avatar-zoom-range" type="range" min="1" max="3" step="0.01" value="1">
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeAvatarCropModal()">Cancel</button>
+        <button type="button" class="btn-primary" onclick="submitCroppedAvatar()">Save Picture</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentScreen = 'screen-title';
+    let screenHistory = [];
+    let allScores = [];
+    let currentTab = 'arcade';
+    let currentView = 'global';
+    let currentUser = window.currentUser || null;
+    let menuIndex = 0;
+    let pendingDeleteFilename = '';
+    let pendingAvatarFile = null;
+    let avatarCropObjectUrl = '';
+    let avatarCropScale = 1;
+    let avatarCropOffsetX = 0;
+    let avatarCropOffsetY = 0;
+    let avatarDragState = null;
+    const AVATAR_CROP_FRAME_SIZE = 260;
+    const AVATAR_CROP_CIRCLE_INSET = 18;
+    const MENU_ACTIONS = [
+      () => showScreen('screen-mode'),
+      () => openLoadModal(),
+      () => showLeaderboard(),
+      () => goToInstructions(),
+      () => switchAccount(),
+    ];
+
+    function navigateWithMusicFade(href) {
+      window.dispatchEvent(new CustomEvent('music:navigate', {
+        detail: { href }
+      }));
+    }
+
+    function showMenuToast(message, type = 'error', position = 'bottom', duration = 2600) {
+      const existing = document.querySelector('.menu-toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.className = `menu-toast menu-toast-${type}`;
+      toast.textContent = message;
+      const verticalPosition = position === 'top' ? 'top: 28px;' : 'bottom: 28px;';
+      toast.style.cssText = `
+        position: fixed;
+        left: 50%;
+        ${verticalPosition}
+        transform: translateX(-50%);
+        z-index: 1200;
+        padding: 12px 18px;
+        border-radius: 12px;
+        background: ${type === 'error' ? 'rgba(170, 35, 35, 0.95)' : 'rgba(26, 120, 70, 0.95)'};
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        opacity: 1;
+        transition: opacity 0.55s ease;
+      `;
+      document.body.appendChild(toast);
+      const fadeDelay = Math.max(0, duration - 550);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+      }, fadeDelay);
+      setTimeout(() => toast.remove(), duration);
+    }
+
+    function setMenuActive(idx) {
+      menuIndex = idx;
+      document.querySelectorAll('.pill-btn').forEach((btn, i) => {
+        btn.classList.toggle('pill-active', i === idx);
+      });
+    }
+
+    function rememberMenuState() {
+      sessionStorage.setItem('menuCurrentScreen', currentScreen);
+      sessionStorage.setItem('menuCurrentTab', currentTab);
+      sessionStorage.setItem('menuCurrentView', currentView);
+    }
+
+    document.querySelectorAll('.pill-btn').forEach((btn, i) => {
+      btn.addEventListener('mouseenter', () => setMenuActive(i));
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (currentScreen === 'screen-title') { advanceFromTitle(); return; }
+      if (currentScreen === 'screen-main') {
+        if (e.key === 'ArrowDown' || e.key === 'Tab') {
+          e.preventDefault();
+          setMenuActive((menuIndex + 1) % 5);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setMenuActive((menuIndex + 4) % 5);
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          MENU_ACTIONS[menuIndex]();
+        }
+      }
+    });
+
+    function advanceFromTitle() {
+      if (currentUser) {
+        showScreen('screen-main');
+        setMenuActive(0);
+      } else {
+        showScreen('screen-account');
+        showAccountMenu();
+      }
+    }
+
+    function setCurrentUser(user) {
+      // Hao Ying: keep the frontend synced to whichever account is active so
+      // profile labels, avatar, and account-specific views update together.
+      currentUser = user;
+      window.currentUser = user;
+      updateCurrentUserDisplay();
+    }
+
+    function updateCurrentUserDisplay() {
+      const label = document.getElementById('current-user-label');
+      const display = document.getElementById('current-user-display');
+      const avatar = document.getElementById('current-user-avatar');
+      // Hao Ying: refresh the visible active-account badge so players can
+      // immediately see which profile is currently using the game.
+      if (currentUser && label && display) {
+        label.textContent = currentUser.display_name;
+        display.classList.remove('hidden');
+        if (avatar) {
+          if (currentUser.avatar_url) {
+            avatar.src = `${currentUser.avatar_url}?v=${Date.now()}`;
+            avatar.classList.remove('hidden');
+          } else {
+            avatar.removeAttribute('src');
+            avatar.classList.add('hidden');
+          }
+        }
+      } else if (label && display) {
+        label.textContent = '';
+        display.classList.add('hidden');
+        if (avatar) {
+          avatar.removeAttribute('src');
+          avatar.classList.add('hidden');
+        }
+      }
+    }
+
+    function triggerAvatarUpload() {
+      if (!currentUser) {
+        showMenuToast('Log in first to add a picture.');
+        return;
+      }
+      const input = document.getElementById('avatar-upload-input');
+      if (input) input.click();
+    }
+
+    async function uploadProfilePicture(event) {
+      const input = event.target;
+      const file = input && input.files ? input.files[0] : null;
+      if (!file) return;
+      pendingAvatarFile = file;
+      openAvatarCropModal(file);
+      input.value = '';
+    }
+
+    function openAvatarCropModal(file) {
+      const image = document.getElementById('avatarCropImage');
+      const zoomRange = document.getElementById('avatarZoomRange');
+      if (!image || !zoomRange || !file) return;
+
+      if (avatarCropObjectUrl) URL.revokeObjectURL(avatarCropObjectUrl);
+      avatarCropObjectUrl = URL.createObjectURL(file);
+      avatarCropScale = 1;
+      avatarCropOffsetX = 0;
+      avatarCropOffsetY = 0;
+      avatarDragState = null;
+      zoomRange.value = '1';
+      image.onload = () => {
+        fitAvatarCropImage();
+        updateAvatarCropPreview();
+      };
+      image.src = avatarCropObjectUrl;
+      document.getElementById('avatarCropModal').classList.remove('hidden');
+    }
+
+    function closeAvatarCropModal() {
+      document.getElementById('avatarCropModal').classList.add('hidden');
+      const image = document.getElementById('avatarCropImage');
+      if (image) image.removeAttribute('src');
+      if (avatarCropObjectUrl) {
+        URL.revokeObjectURL(avatarCropObjectUrl);
+        avatarCropObjectUrl = '';
+      }
+      pendingAvatarFile = null;
+      avatarDragState = null;
+    }
+
+    function fitAvatarCropImage() {
+      const image = document.getElementById('avatarCropImage');
+      if (!image || !image.naturalWidth || !image.naturalHeight) return;
+
+      const cropSize = AVATAR_CROP_FRAME_SIZE - (AVATAR_CROP_CIRCLE_INSET * 2);
+      const baseScale = Math.max(cropSize / image.naturalWidth, cropSize / image.naturalHeight);
+      image.dataset.baseScale = String(baseScale);
+      avatarCropScale = 1;
+      avatarCropOffsetX = 0;
+      avatarCropOffsetY = 0;
+      clampAvatarOffsets();
+    }
+
+    function updateAvatarCropPreview() {
+      const image = document.getElementById('avatarCropImage');
+      if (!image) return;
+      const baseScale = Number(image.dataset.baseScale || '1');
+      const totalScale = baseScale * avatarCropScale;
+      image.style.transform = `translate(calc(-50% + ${avatarCropOffsetX}px), calc(-50% + ${avatarCropOffsetY}px)) scale(${totalScale})`;
+    }
+
+    function clampAvatarOffsets() {
+      const image = document.getElementById('avatarCropImage');
+      if (!image || !image.naturalWidth || !image.naturalHeight) return;
+
+      const cropSize = AVATAR_CROP_FRAME_SIZE - (AVATAR_CROP_CIRCLE_INSET * 2);
+      const baseScale = Number(image.dataset.baseScale || '1');
+      const width = image.naturalWidth * baseScale * avatarCropScale;
+      const height = image.naturalHeight * baseScale * avatarCropScale;
+      const maxX = Math.max(0, (width - cropSize) / 2);
+      const maxY = Math.max(0, (height - cropSize) / 2);
+      avatarCropOffsetX = Math.min(maxX, Math.max(-maxX, avatarCropOffsetX));
+      avatarCropOffsetY = Math.min(maxY, Math.max(-maxY, avatarCropOffsetY));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const zoomRange = document.getElementById('avatarZoomRange');
+      const cropImage = document.getElementById('avatarCropImage');
+      if (zoomRange) {
+        zoomRange.addEventListener('input', () => {
+          avatarCropScale = Number(zoomRange.value || '1');
+          clampAvatarOffsets();
+          updateAvatarCropPreview();
+        });
+      }
+
+      if (cropImage) {
+        const startDrag = (clientX, clientY) => {
+          avatarDragState = {
+            x: clientX,
+            y: clientY,
+            startOffsetX: avatarCropOffsetX,
+            startOffsetY: avatarCropOffsetY,
+          };
+        };
+
+        cropImage.addEventListener('mousedown', (event) => {
+          event.preventDefault();
+          startDrag(event.clientX, event.clientY);
+        });
+        cropImage.addEventListener('touchstart', (event) => {
+          const touch = event.touches[0];
+          if (!touch) return;
+          startDrag(touch.clientX, touch.clientY);
+        }, { passive: true });
+
+        const moveDrag = (clientX, clientY) => {
+          if (!avatarDragState) return;
+          avatarCropOffsetX = avatarDragState.startOffsetX + (clientX - avatarDragState.x);
+          avatarCropOffsetY = avatarDragState.startOffsetY + (clientY - avatarDragState.y);
+          clampAvatarOffsets();
+          updateAvatarCropPreview();
+        };
+
+        window.addEventListener('mousemove', (event) => moveDrag(event.clientX, event.clientY));
+        window.addEventListener('touchmove', (event) => {
+          const touch = event.touches[0];
+          if (!touch) return;
+          moveDrag(touch.clientX, touch.clientY);
+        }, { passive: true });
+
+        const stopDrag = () => { avatarDragState = null; };
+        window.addEventListener('mouseup', stopDrag);
+        window.addEventListener('touchend', stopDrag);
+      }
+    });
+
+    async function submitCroppedAvatar() {
+      const image = document.getElementById('avatarCropImage');
+      if (!image || !pendingAvatarFile || !image.naturalWidth || !image.naturalHeight) {
+        closeAvatarCropModal();
+        return;
+      }
+
+      const cropSize = AVATAR_CROP_FRAME_SIZE - (AVATAR_CROP_CIRCLE_INSET * 2);
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        showMenuToast('Could not crop this image.');
+        return;
+      }
+
+      const baseScale = Number(image.dataset.baseScale || '1');
+      const totalScale = baseScale * avatarCropScale;
+      const displayedWidth = image.naturalWidth * totalScale;
+      const displayedHeight = image.naturalHeight * totalScale;
+      const left = ((AVATAR_CROP_FRAME_SIZE - displayedWidth) / 2) + avatarCropOffsetX;
+      const top = ((AVATAR_CROP_FRAME_SIZE - displayedHeight) / 2) + avatarCropOffsetY;
+      const cropLeft = AVATAR_CROP_CIRCLE_INSET;
+      const cropTop = AVATAR_CROP_CIRCLE_INSET;
+      const sourceX = Math.max(0, ((cropLeft - left) / displayedWidth) * image.naturalWidth);
+      const sourceY = Math.max(0, ((cropTop - top) / displayedHeight) * image.naturalHeight);
+      const sourceWidth = Math.min(image.naturalWidth - sourceX, (cropSize / displayedWidth) * image.naturalWidth);
+      const sourceHeight = Math.min(image.naturalHeight - sourceY, (cropSize / displayedHeight) * image.naturalHeight);
+
+      ctx.drawImage(
+        image,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 0.92));
+      if (!blob) {
+        showMenuToast('Could not crop this image.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('avatar', blob, 'avatar.png');
+
+      try {
+        const res = await fetch('/api/account/avatar', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showMenuToast(data.error || 'Failed to update picture.');
+          return;
+        }
+
+        setCurrentUser(data.current_user || currentUser);
+        closeAvatarCropModal();
+        showMenuToast(data.message || 'Profile picture updated.', 'ok');
+      } catch (error) {
+        showMenuToast('Failed to update picture.');
+      }
+    }
+
+    function showAccountMenu() {
+      document.getElementById('account-actions').classList.remove('hidden');
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('create-form').classList.add('hidden');
+      document.getElementById('account-title').textContent = 'Log in or make a new account';
+      document.getElementById('account-status').textContent = 'Choose login or create a new account to continue.';
+      sessionStorage.setItem('menuAccountPanel', 'menu');
+      setAccountMessage('login', 'success', '');
+      setAccountMessage('create', 'success', '');
+    }
+
+    function showAccountPanel(panel) {
+      document.getElementById('account-actions').classList.add('hidden');
+      document.getElementById('login-form').classList.toggle('hidden', panel !== 'login');
+      document.getElementById('create-form').classList.toggle('hidden', panel !== 'create');
+      sessionStorage.setItem('menuAccountPanel', panel);
+      setAccountMessage('login', 'success', '');
+      setAccountMessage('create', 'success', '');
+      if (panel === 'login') {
+        document.getElementById('account-title').textContent = 'Log in to your account';
+        document.getElementById('account-status').textContent = 'Use an existing account to log in.';
+        document.getElementById('login-username').focus();
+      } else {
+        document.getElementById('account-title').textContent = 'Make a brand new account';
+        document.getElementById('account-status').textContent = 'Create a new account to get started.';
+        document.getElementById('display-name-input').focus();
+      }
+    }
+
+    function setAccountMessage(panel, kind, message) {
+      const loginMessage = document.getElementById('login-message');
+      const createMessage = document.getElementById('create-message');
+      const target = panel === 'login' ? loginMessage : createMessage;
+      if (target) {
+        target.textContent = '';
+        target.className = 'account-message';
+        target.textContent = message;
+        target.classList.add(kind === 'error' ? 'account-message-error' : 'account-message-success');
+      }
+    }
+
+    async function submitLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+
+      // Theresa: send the entered login credentials to the backend and
+      // activate that player's account if the details are correct.
+      try {
+        const res = await fetch('/api/account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'login', username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setAccountMessage('login', 'error', data.error || 'Incorrect username or password.');
+          return false;
+        }
+        setCurrentUser(data.current_user);
+        showScreen('screen-main');
+        setMenuActive(0);
+        showAccountMenu();
+        setAccountMessage('login', 'success', data.message || 'Welcome back.');
+        return false;
+      } catch (error) {
+        setAccountMessage('login', 'error', 'Unable to read users.json right now.');
+        return false;
+      }
+    }
+
+    async function submitCreateAccount(event) {
+      event.preventDefault();
+      const displayName = document.getElementById('display-name-input').value;
+      const username = document.getElementById('create-username').value;
+      const password = document.getElementById('create-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      // Theresa: submit the new account details so a separate player profile
+      // can be created and used immediately after registration.
+      try {
+        const res = await fetch('/api/account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'create',
+            display_name: displayName,
+            username,
+            password,
+            confirm_password: confirmPassword
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setAccountMessage('create', 'error', data.error || 'Could not create the account.');
+          return false;
+        }
+        setCurrentUser(data.current_user);
+        showScreen('screen-main');
+        setMenuActive(0);
+        showAccountMenu();
+        setAccountMessage('create', 'success', data.message || 'Account created successfully.');
+        return false;
+      } catch (error) {
+        setAccountMessage('create', 'error', 'Unable to read users.json right now.');
+        return false;
+      }
+    }
+
+    async function switchAccount(returnToTitle = false) {
+      // Hao Ying: switching account clears the current profile from the UI
+      // and returns the player to the account flow to choose another user.
+      try {
+        await fetch('/api/account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'exit' })
+        });
+      } catch (error) {
+        // If the request fails, still clear the local session view.
+      }
+      setCurrentUser(null);
+      if (returnToTitle) {
+        showScreen('screen-title');
+      } else {
+        showScreen('screen-account');
+        showAccountMenu();
+      }
+    }
+
+    function exitAccount() {
+      switchAccount(true);
+    }
+
+    // ── Entry routing ──────────────────────────────────────────────
+    // Show the title screen on a fresh open, but keep the old routing on
+    // browser refresh so the page does not always jump back to the start.
+    const navigationEntry = performance.getEntriesByType('navigation')[0];
+    const isReload = navigationEntry && navigationEntry.type === 'reload';
+
+    if (sessionStorage.getItem('jumpToMainMenu')) {
+      sessionStorage.removeItem('jumpToMainMenu');
+      showScreen('screen-main', false);
+      setMenuActive(0);
+      const toastMessage = sessionStorage.getItem('menuToastMessage');
+      if (toastMessage) {
+        const toastType = sessionStorage.getItem('menuToastType') || 'ok';
+        const toastPosition = sessionStorage.getItem('menuToastPosition') || 'top';
+        const toastDuration = Number(sessionStorage.getItem('menuToastDuration') || '5000');
+        sessionStorage.removeItem('menuToastMessage');
+        sessionStorage.removeItem('menuToastType');
+        sessionStorage.removeItem('menuToastPosition');
+        sessionStorage.removeItem('menuToastDuration');
+        showMenuToast(toastMessage, toastType, toastPosition, toastDuration);
+      }
+    } else if (sessionStorage.getItem('jumpToModeSelect')) {
+      sessionStorage.removeItem('jumpToModeSelect');
+      showScreen('screen-main', false);
+      showScreen('screen-mode', true);
+      setMenuActive(0);
+    } else if (!isReload) {
+      sessionStorage.removeItem('jumpToModeSelect');
+      sessionStorage.removeItem('menuCurrentScreen');
+      sessionStorage.removeItem('menuCurrentTab');
+      sessionStorage.removeItem('menuCurrentView');
+      sessionStorage.removeItem('menuAccountPanel');
+      showScreen('screen-title', false);
+    } else if (sessionStorage.getItem('menuCurrentScreen')) {
+      currentTab = sessionStorage.getItem('menuCurrentTab') || currentTab;
+      currentView = sessionStorage.getItem('menuCurrentView') || currentView;
+      const savedScreen = sessionStorage.getItem('menuCurrentScreen');
+      showScreen(savedScreen, false);
+      if (savedScreen === 'screen-account') {
+        const savedPanel = sessionStorage.getItem('menuAccountPanel');
+        if (savedPanel === 'login' || savedPanel === 'create') {
+          showAccountPanel(savedPanel);
+        } else {
+          showAccountMenu();
+        }
+      } else if (savedScreen === 'screen-leaderboard') {
+        document.getElementById('tab-arcade').classList.toggle('lb-tab-active', currentTab === 'arcade');
+        document.getElementById('tab-freeplay').classList.toggle('lb-tab-active', currentTab === 'freeplay');
+        document.getElementById('tab-challenge').classList.toggle('lb-tab-active', currentTab === 'challenge');
+        document.getElementById('view-global').classList.toggle('lb-view-active', currentView === 'global');
+        document.getElementById('view-mine').classList.toggle('lb-view-active', currentView === 'mine');
+        loadLeaderboardData();
+      }
+    } else if (window.location.hash === '#menu') {
+      showScreen('screen-main', false);
+      setMenuActive(0);
+    } else if (window.location.hash === '#mode') {
+      showScreen('screen-main', false);
+      showScreen('screen-mode', true);
+      setMenuActive(0);
+    } else if (currentUser) {
+      showScreen('screen-main', false);
+      setMenuActive(0);
+    } else {
+      showScreen('screen-title', false);
+    }
+
+    function showScreen(id, addHistory = true) {
+      if (addHistory && currentScreen !== id) screenHistory.push(currentScreen);
+      document.getElementById(currentScreen).classList.remove('screen-active');
+      currentScreen = id;
+      document.getElementById(id).classList.add('screen-active');
+      rememberMenuState();
+      const backBtn = document.getElementById('back-btn');
+      if (id === 'screen-title' || id === 'screen-account' || id === 'screen-main') {
+        backBtn.classList.add('hidden');
+      } else {
+        backBtn.classList.remove('hidden');
+      }
+      if (id === 'screen-main') updateCurrentUserDisplay();
+    }
+
+    function goBack() {
+      if (currentScreen === 'screen-leaderboard') {
+        showScreen('screen-main', false);
+        setMenuActive(0);
+        return;
+      }
+      if (screenHistory.length > 0) {
+        const prev = screenHistory.pop();
+        showScreen(prev, false);
+      }
+    }
+
+    function goToInstructions() {
+      navigateWithMusicFade('/instructions');
+    }
+
+    async function startGame(mode) {
+      try {
+        const res = await fetch('/api/new_game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode })
+        });
+        if (res.ok) navigateWithMusicFade('/game');
+      } catch (e) {
+        showMenuToast('Failed to start game. Make sure the server is running.');
+      }
+    }
+
+    // ── Load Game (per-account scoped) ───────────────────────────────
+    // Saves live in a folder per username on the server. The session user
+    // decides which saves are shown, loaded, and written.
+
+    async function openLoadModal() {
+      const list = document.getElementById('savesList');
+
+      if (!currentUser) {
+        list.innerHTML = '<p class="empty-state">Log in first to see your saves.</p>';
+        document.getElementById('loadModal').classList.remove('hidden');
+        return;
+      }
+
+      list.innerHTML = '<p class="empty-state">Loading…</p>';
+      document.getElementById('loadModal').classList.remove('hidden');
+
+      try {
+        // Theresa: fetch the logged-in player's saved runs so they can pick
+        // one and continue from a previous session.
+        const res = await fetch('/api/saves');
+        const data = await res.json();
+        if (!data.saves || !data.saves.length) {
+          list.innerHTML = '<p class="empty-state">No saved games found.</p>';
+        } else {
+          renderSavesList(data.saves);
+        }
+      } catch (e) {
+        list.innerHTML = '<p class="empty-state">Could not load saves.</p>';
+      }
+    }
+
+    function renderSavesList(saves) {
+      const list = document.getElementById('savesList');
+      const groups = {
+        arcade: [],
+        freeplay: [],
+        challenge: [],
+        unknown: [],
+      };
+
+      saves.forEach((save) => {
+        const mode = String(save.mode || '').toLowerCase();
+        if (mode === 'arcade' || mode === 'freeplay' || mode === 'challenge') {
+          groups[mode].push(save);
+        } else {
+          groups.unknown.push(save);
+        }
+      });
+
+      const sections = [
+        { key: 'arcade', title: 'Arcade Mode' },
+        { key: 'freeplay', title: 'Free Play Mode' },
+        { key: 'challenge', title: 'Challenges Mode' },
+        { key: 'unknown', title: 'Other Saves' },
+      ];
+
+      list.innerHTML = sections.map(({ key, title }) => {
+        if (!groups[key].length) return '';
+        const rows = groups[key].map((save) => `
+          <div class="save-row">
+            <div class="save-item">${save.filename}</div>
+            <button type="button" class="save-join-btn" data-filename="${encodeURIComponent(save.filename)}">Join</button>
+            <button type="button" class="save-delete-btn" data-filename="${encodeURIComponent(save.filename)}">Delete</button>
+          </div>
+        `).join('');
+        return `
+          <section class="save-group">
+            <h3 class="save-group-title">${title}</h3>
+            <div class="save-group-list">${rows}</div>
+          </section>
+        `;
+      }).join('');
+
+      list.querySelectorAll('.save-join-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          const filename = decodeURIComponent(button.dataset.filename || '');
+          loadGame(filename);
+        });
+      });
+
+      list.querySelectorAll('.save-delete-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          const filename = decodeURIComponent(button.dataset.filename || '');
+          deleteSave(filename);
+        });
+      });
+    }
+
+    async function loadGame(filename) {
+      try {
+        // Theresa: loading a save swaps the current run to the chosen city
+        // and returns the player to gameplay from that saved point.
+        const res = await fetch('/api/load', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          navigateWithMusicFade('/game');
+          return;
+        }
+        showMenuToast(data.error || 'Failed to load game.');
+      } catch (error) {
+        showMenuToast('Failed to load game.');
+      }
+    }
+
+    function deleteSave(filename) {
+      pendingDeleteFilename = filename;
+      const message = document.getElementById('deleteSaveMessage');
+      if (message) {
+        message.textContent = `Do you want to delete "${filename}"? This cannot be undone.`;
+      }
+      document.getElementById('deleteSaveModal').classList.remove('hidden');
+    }
+
+    function closeDeleteSaveModal() {
+      pendingDeleteFilename = '';
+      document.getElementById('deleteSaveModal').classList.add('hidden');
+    }
+
+    async function confirmDeleteSave() {
+      const filename = pendingDeleteFilename;
+      if (!filename) {
+        closeDeleteSaveModal();
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/save', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showMenuToast(data.error || 'Failed to delete save.');
+          return;
+        }
+
+        closeDeleteSaveModal();
+        showMenuToast(`Deleted "${filename}".`, 'ok');
+        await openLoadModal();
+      } catch (error) {
+        closeDeleteSaveModal();
+        showMenuToast('Failed to delete save.');
+      }
+    }
+
+    // ── Leaderboard data loading ─────────────────────────────────────
+    // showLeaderboard(): entry point when navigating to the leaderboard screen.
+    // loadLeaderboardData(): fetches the correct dataset for the current view —
+    //   'global'  -> /api/highscores  (trimmed, top 10 per mode, best score only)
+    //   'mine'    -> /api/my_scores   (full untrimmed history for the logged-in account)
+    // switchView() / switchTab() both call loadLeaderboardData()/renderLeaderboard()
+    // so the displayed list always matches the active view + tab.
+
+    async function showLeaderboard() {
+      // Hao Ying: open the high scores screen and load the latest data so
+      // players can compare their results with previous runs.
+      showScreen('screen-leaderboard');
+      updateLeaderboardInfoText();
+      await loadLeaderboardData();
+    }
+
+    function updateLeaderboardInfoText() {
+      const info = document.getElementById('lb-info-text');
+      if (!info) return;
+      info.textContent = currentView === 'mine'
+        ? "All your scores so far. See every city run you've recorded."
+        : 'Top 10 all-time rankings. See the best cities built so far.';
+    }
+
+    async function loadLeaderboardData() {
+      const container = document.getElementById('lb-entries');
+      container.innerHTML = '<p class="empty-state">Loading…</p>';
+      try {
+        if (currentView === 'mine') {
+          if (!currentUser) {
+            allScores = [];
+            container.innerHTML = '<p class="empty-state">Log in and play a game first!</p>';
+            return;
+          }
+          const res = await fetch('/api/my_scores');
+          const data = await res.json();
+          allScores = data.scores || [];
+        } else {
+          const res = await fetch('/api/highscores');
+          const data = await res.json();
+          allScores = data.scores || [];
+        }
+        renderLeaderboard();
+      } catch (e) {
+        container.innerHTML = '<p class="empty-state">Could not load scores.</p>';
+      }
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tab-arcade').classList.toggle('lb-tab-active', tab === 'arcade');
+      document.getElementById('tab-freeplay').classList.toggle('lb-tab-active', tab === 'freeplay');
+      document.getElementById('tab-challenge').classList.toggle('lb-tab-active', tab === 'challenge');
+      renderLeaderboard();
+    }
+
+    function switchView(view) {
+      currentView = view;
+      document.getElementById('view-global').classList.toggle('lb-view-active', view === 'global');
+      document.getElementById('view-mine').classList.toggle('lb-view-active', view === 'mine');
+      updateLeaderboardInfoText();
+      loadLeaderboardData();
+    }
+
+    function renderLeaderboard() {
+      let scores = allScores.filter(s => s.mode === currentTab);
+      const currentUserId = currentUser ? String(currentUser.user_id) : '';
+      const currentUsername = currentUser ? String(currentUser.username).toLowerCase() : '';
+
+      const container = document.getElementById('lb-entries');
+
+      if (!scores.length) {
+        container.innerHTML = currentView === 'mine'
+          ? '<p class="empty-state">You haven\'t made the leaderboard yet — keep playing!</p>'
+          : '<p class="empty-state">No scores yet.</p>';
+        return;
+      }
+
+      const listScores = currentView === 'mine' ? scores : scores.slice(3);
+      const restHtml = listScores.map((s, i) => {
+        const rank = currentView === 'mine' ? i + 1 : i + 4;
+        const scoreUserId = s.user_id !== undefined && s.user_id !== null ? String(s.user_id) : '';
+        const scoreUsername = String(s.username || s.name || s.display_name || '').toLowerCase();
+        const isYou = false;
+        const label = s.display_name || s.name || 'Unknown';
+        const handle = '@' + String(s.username || label).replace(/\s+/g, '').toLowerCase();
+        const turnsHtml = (s.turns !== undefined && s.turns !== null)
+          ? `<span class="lb-turns">${s.turns} turns</span>`
+          : '';
+        const initials = label.split(/\s+/).map(part => part[0] || '').join('').slice(0, 2).toUpperCase();
+        const avatarHtml = s.avatar_url
+          ? `<img class="lb-avatar-sm lb-avatar-img" src="${s.avatar_url}" alt="${label} profile picture">`
+          : `<div class="lb-avatar-sm">${initials}</div>`;
+        return `<div class="lb-entry${isYou ? ' lb-own' : ''}">
+          <div class="lb-entry-left">
+            <span class="lb-rank">${rank}.</span>
+            ${avatarHtml}
+            <div class="lb-meta">
+              <span class="lb-name">${label}</span>
+              <span class="lb-handle">${handle}</span>
+            </div>
+          </div>
+          <div class="lb-entry-right">
+            ${turnsHtml}
+            <span class="lb-score">${s.score.toLocaleString()} pts</span>
+          </div>
+        </div>`;
+      }).join('');
+
+      if (currentView === 'mine') {
+        container.innerHTML = `<section class="lb-rankings-list">${restHtml}</section>`;
+        return;
+      }
+
+      const podiumOrder = [1, 0, 2].filter(index => index < scores.length);
+      const podiumHtml = podiumOrder.map((scoreIndex) => {
+        const score = scores[scoreIndex];
+        const rank = scoreIndex + 1;
+        const accentClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : 'bronze';
+        const label = score.display_name || score.name || 'Unknown';
+        const username = String(score.username || '').trim();
+        const handle = username ? `@${username}` : '@unknown';
+        const initials = label.split(/\s+/).map(part => part[0] || '').join('').slice(0, 2).toUpperCase();
+        const avatarHtml = score.avatar_url
+          ? `<img class="lb-podium-avatar lb-avatar-img" src="${score.avatar_url}" alt="${label} profile picture">`
+          : `<div class="lb-podium-avatar">${initials}</div>`;
+        const turnsHtml = (score.turns !== undefined && score.turns !== null)
+          ? `<div class="lb-podium-turns">${score.turns} turns</div>`
+          : '';
+        return `<article class="lb-podium-card lb-podium-${accentClass} lb-podium-rank-${rank}">
+          ${rank === 1 ? '<div class="lb-podium-crown">👑</div>' : ''}
+          <div class="lb-podium-badge">${rank}</div>
+          ${avatarHtml}
+          <div class="lb-podium-name">${label}</div>
+          <div class="lb-podium-handle">${handle}</div>
+          <div class="lb-podium-score">${score.score.toLocaleString()} pts</div>
+          ${turnsHtml}
+        </article>`;
+      }).join('');
+
+      container.innerHTML = `
+        <section class="lb-showcase">
+          <div class="lb-showcase-header">
+            <span class="lb-showcase-kicker">Top players</span>
+            <h3 class="lb-showcase-title">${currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Rankings</h3>
+          </div>
+          <div class="lb-podium-grid">${podiumHtml}</div>
+        </section>
+        <section class="lb-rankings-list">${restHtml}</section>
+      `;
+    }
+
+    function closeModal(event, id) {
+      if (event.target === event.currentTarget) closeModalById(id);
+    }
+    function closeModalById(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+  </script>
+  <script src="/static/music.js"></script>
+</body>
+</html>

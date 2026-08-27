@@ -1,0 +1,299 @@
+[
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 0,
+    "mode": "arcade",
+    "turns": 9
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 3,
+    "mode": "arcade",
+    "turns": 5
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 71,
+    "mode": "arcade",
+    "turns": 27
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 0,
+    "mode": "challenge",
+    "turns": 1
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 15,
+    "mode": "challenge",
+    "turns": 10
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 211,
+    "mode": "challenge",
+    "turns": 40
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 7,
+    "mode": "challenge",
+    "turns": 8
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 7,
+    "mode": "challenge",
+    "turns": 8
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "name": "Mbappe",
+    "score": 11,
+    "mode": "freeplay",
+    "turns": 13
+  },
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 15,
+    "mode": "freeplay",
+    "turns": 11
+  },
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 11,
+    "mode": "challenge",
+    "turns": 11
+  },
+  {
+    "user_id": 1,
+    "username": "shinchan",
+    "display_name": "Shinchan",
+    "name": "Shinchan",
+    "score": 31,
+    "mode": "arcade",
+    "turns": 20
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "name": "Haoying",
+    "score": 15,
+    "mode": "freeplay",
+    "turns": 11
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "name": "Haoying",
+    "score": 68,
+    "mode": "challenge",
+    "turns": 19
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "name": "Haoying",
+    "score": 5,
+    "mode": "challenge",
+    "turns": 8
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "name": "Haoying",
+    "score": 15,
+    "mode": "arcade",
+    "turns": 10
+  },
+  {
+    "user_id": 5,
+    "username": "XavierAng",
+    "display_name": "Xavier",
+    "name": "Xavier",
+    "score": 137,
+    "mode": "arcade",
+    "turns": 41
+  },
+  {
+    "user_id": 5,
+    "username": "XavierAng",
+    "display_name": "Xavier",
+    "name": "Xavier",
+    "score": 20,
+    "mode": "freeplay",
+    "turns": 14
+  },
+  {
+    "user_id": 5,
+    "username": "XavierAng",
+    "display_name": "Xavier",
+    "name": "Xavier",
+    "score": 102,
+    "mode": "challenge",
+    "turns": 26
+  },
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 1242,
+    "mode": "arcade",
+    "turns": 83
+  },
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 3038,
+    "mode": "freeplay",
+    "turns": 128
+  },
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 9,
+    "mode": "challenge",
+    "turns": 12
+  },
+  {
+    "user_id": 2,
+    "username": "theresa",
+    "display_name": "high0nc0cane",
+    "name": "high0nc0cane",
+    "score": 36,
+    "mode": "freeplay",
+    "turns": 7
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "avatar_url": "/static/profile_pics/user-3.jpg",
+    "name": "Mbappe",
+    "score": 0,
+    "mode": "arcade",
+    "turns": 1
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "avatar_url": "/static/profile_pics/user-3.jpg",
+    "name": "Mbappe",
+    "score": 130,
+    "mode": "challenge",
+    "turns": 29
+  },
+  {
+    "user_id": 3,
+    "username": "mbappe",
+    "display_name": "Mbappe",
+    "avatar_url": "/static/profile_pics/user-3.jpg",
+    "name": "Mbappe",
+    "score": 97,
+    "mode": "challenge",
+    "turns": 34
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 13,
+    "mode": "arcade",
+    "turns": 14
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 7,
+    "mode": "arcade",
+    "turns": 11
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 0,
+    "mode": "freeplay",
+    "turns": 3
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 88,
+    "mode": "arcade",
+    "turns": 8
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 77,
+    "mode": "arcade",
+    "turns": 15
+  },
+  {
+    "user_id": 4,
+    "username": "haoying",
+    "display_name": "Haoying",
+    "avatar_url": "/static/profile_pics/user-4.png",
+    "name": "Haoying",
+    "score": 0,
+    "mode": "arcade",
+    "turns": 1
+  }
+]

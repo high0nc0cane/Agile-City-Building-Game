@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngee Ann City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@300;400;900&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+   <!-- Before the page is sent to the browser, Flask replaces this with the actual logged-in user's data, converted into JSON format (tojson does that conversion). -->
+  <script>
+    window.currentUser = {{ current_user_public | tojson }}; 
+  </script>
+  </head>
+<body>
+  <!-- Notification popups (outside game-body for proper fixed positioning) -->
+  <section id="bonus-task-popup" class="bonus-task-popup hidden" role="status" aria-live="polite" aria-atomic="true">
+    <div class="bonus-task-popup-icon">🏆</div>
+    <div class="bonus-task-popup-content">
+      <div class="bonus-task-popup-title" id="bonus-popup-title">Bonus Task Complete</div>
+      <div class="bonus-task-popup-desc" id="bonus-popup-desc">You earned bonus points!</div>
+    </div>
+  </section>
+
+  <section id="city-event-popup" class="city-event-popup hidden" role="status" aria-live="polite" aria-atomic="true">
+    <div class="city-event-popup-heading">
+      <span id="city-event-popup-category" class="city-event-popup-category">City Event</span>
+      <button id="city-event-popup-close" class="city-event-popup-close" type="button" aria-label="Close city event notification">✕</button>
+    </div>
+    <h2 id="city-event-popup-title" class="city-event-popup-title">City Event</h2>
+    <p id="city-event-popup-description" class="city-event-popup-description"></p>
+    <p id="city-event-popup-effect" class="city-event-popup-effect"></p>
+    <p id="city-event-popup-countdown" class="city-event-popup-countdown hidden"></p>
+  </section>
+
+  <div class="game-body">
+
+  <!-- City background -->
+  <div class="game-bg">
+    <!-- Theresa: the animated in-game background adds motion behind the board to make the play screen feel more engaging. -->
+    <img class="scene-image" src="/static/backgrounds/ekkant-night-9061.gif" alt="Animated night city background">
+  </div>
+
+  <div class="game-layout">
+   <div class="game-group">
+
+    <!-- LEFT: Legend + Live Statistics -->
+    <div class="gl-left-col">
+      <aside class="gl-side-panel">
+        <div class="gl-panel-toggle" role="tablist" aria-label="Legend and bonus tasks">
+          <button class="gl-switch-btn active" data-panel="legend" type="button">Legend</button>
+          <button class="gl-switch-btn" data-panel="bonus" type="button">Bonus Tasks</button>
+        </div>
+        <div id="legend-panel" class="gl-panel-view active">
+          <p class="g-panel-label">Legend</p>
+          <div class="g-legend-list">
+            <div class="g-legend-row"><span class="leg-tile r-tile">R</span><span>Residential</span></div>
+            <div class="g-legend-row"><span class="leg-tile i-tile">I</span><span>Industry</span></div>
+            <div class="g-legend-row"><span class="leg-tile c-tile">C</span><span>Commercial</span></div>
+            <div class="g-legend-row"><span class="leg-tile o-tile">O</span><span>Park</span></div>
+            <div class="g-legend-row"><span class="leg-tile road-tile">*</span><span>Road</span></div>
+            <div class="g-legend-row"><span class="leg-tile valid-tile"></span><span>Valid placement</span></div>
+          </div>
+        </div>
+        <div id="bonus-panel" class="gl-panel-view">
+          <p class="g-panel-label">Bonus Tasks</p>
+          <div class="bonus-progress-card">
+            <div class="bonus-progress-meta">
+              <span id="bonus-completion-text">0/5 completed</span>
+              <span id="bonus-progress-label">Progress</span>
+            </div>
+            <div class="bonus-progress-bar" aria-hidden="true">
+              <div id="bonus-progress-fill" class="bonus-progress-fill"></div>
+            </div>
+          </div>
+          <div class="bonus-task-filter">
+            <button class="bonus-filter-btn active" data-filter="active">Active</button>
+            <button class="bonus-filter-btn" data-filter="completed">Completed</button>
+          </div>
+          <div id="bonus-task-list" class="bonus-task-list"></div>
+        </div>
+      </aside>
+
+      <!-- Dylan: this panel shows a live city snapshot so players can track progress without leaving the board. -->
+      <!-- --- A2S-241: Live Statistics Dashboard --- -->
+      <div class="g-dashboard" style="background: rgba(14, 32, 64, 0.85); border: 1px solid #4a90e2; padding: 15px; border-radius: 8px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <p class="g-panel-label" style="color: #a8d8ff; margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid #4a90e2; padding-bottom: 5px;">Live Statistics</p>
+        <div id="stats-list" style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; line-height: 1.6;">
+            <em>Loading dashboard...</em>
+        </div>
+      </div>
+      <!-- ------------------------------------------ -->
+
+      <section id="challenge-event-panel" class="g-event-feed-panel hidden" aria-label="Challenge Event Log">
+        <p class="g-panel-label">City Event Feed</p>
+        <div id="challenge-event-feed" class="g-event-feed" role="log" aria-live="off" aria-relevant="additions text">
+          <p class="g-event-empty">No city events yet. Continue building your city.</p>
+        </div>
+      </section>
+    </div><!-- /gl-left-col -->
+
+    <!-- CENTER: Game grid -->
+    <main class="gl-main">
+      <div class="grid-scroll-wrap">
+        <div id="grid-with-labels" class="grid-with-labels">
+          <div class="grid-corner"></div>
+          <div id="grid-col-labels" class="grid-col-labels"></div>
+          <div id="grid-row-labels" class="grid-row-labels"></div>
+          <div id="game-grid" class="game-grid"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT: Stats â†’ Building chooser â†’ Actions -->
+    <div class="gl-right">
+
+      <!-- Stat cards 2Ã—2 -->
+      <div class="g-stats">
+        <div class="g-stat-card">
+          <span class="g-stat-label">Score</span>
+          <span class="g-stat-value" id="stat-score">0</span>
+        </div>
+        <div class="g-stat-card">
+          <span class="g-stat-label">Coins</span>
+          <span class="g-stat-value" id="stat-coins">16</span>
+        </div>
+        <div class="g-stat-card">
+          <span class="g-stat-label">Turn</span>
+          <span class="g-stat-value" id="stat-turn">1</span>
+        </div>
+        <div class="g-stat-card">
+          <span class="g-stat-label">Buildings</span>
+          <span class="g-stat-value" id="stat-buildings">0</span>
+        </div>
+        <!-- Free play extras -->
+        <div class="g-stat-card fp-only hidden">
+          <span class="g-stat-label">Profit</span>
+          <span class="g-stat-value positive" id="stat-profit">0</span>
+        </div>
+        <div class="g-stat-card fp-only hidden">
+          <span class="g-stat-label">Upkeep</span>
+          <span class="g-stat-value negative" id="stat-upkeep">0</span>
+        </div>
+        <div class="g-stat-card fp-only hidden">
+          <span class="g-stat-label">Net</span>
+          <span class="g-stat-value" id="stat-net">0</span>
+        </div>
+        <div class="g-stat-card fp-only hidden" id="loss-stat">
+          <span class="g-stat-label">Loss Turns</span>
+          <span class="g-stat-value warning" id="stat-loss">0</span>
+        </div>
+        <div class="g-stat-card challenge-only hidden">
+          <span class="g-stat-label">Income</span>
+          <span class="g-stat-value positive" id="stat-challenge-income">0</span>
+        </div>
+        <div class="g-stat-card challenge-only hidden">
+          <span class="g-stat-label">Maintenance</span>
+          <span class="g-stat-value negative" id="stat-challenge-upkeep">0</span>
+        </div>
+      </div>
+
+      <!-- Building chooser -->
+      <div class="g-building-panel">
+        <p class="g-panel-label" id="panel-chooser-title">Choose a Building</p>
+        <div id="building-options" class="g-building-options"></div>
+        <p class="g-building-hint hidden" id="panel-hint">Select a building, then click a cell.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="g-actions">
+        <p class="g-panel-label">Actions</p>
+        <button class="g-action-btn" id="demolish-btn" onclick="toggleDemolish()">
+          🔨 Demolish Building
+        </button>
+        <button class="g-action-btn" onclick="openSaveModal()">
+          💾 Save Game
+        </button>
+        <button class="g-action-btn" onclick="triggerManualEnd()">
+          End Game
+        </button>
+      </div>
+
+    </div><!-- /gl-right -->
+
+   </div><!-- /game-group -->
+  </div><!-- /game-layout -->
+
+  </div><!-- /game-body -->
+
+  <!-- â”€â”€ Save Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <div id="saveModal" class="modal-overlay hidden" onclick="closeModal(event,'saveModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Save Game</h2>
+        <button class="modal-close" onclick="closeModalById('saveModal')">✕</button>
+      </div>
+      <p class="modal-body-text">Enter a name for this save:</p>
+      <input id="saveFilename" class="modal-input" type="text" placeholder="my-city" maxlength="30">
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="doSave()">Save</button>
+        <button class="btn-secondary" onclick="closeModalById('saveModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ Game Over Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <div id="gameOverModal" class="modal-overlay hidden">
+    <div class="modal-box modal-gameover">
+      <div class="gameover-icon">🏆</div>
+      <h2 class="gameover-title">Game Over</h2>
+      <p class="gameover-reason" id="gameover-reason"></p>
+      <div class="gameover-score">
+        <span class="go-label">Final Score</span>
+        <span class="go-value" id="gameover-score">0</span>
+      </div>
+      <div id="name-entry" class="name-entry hidden">
+        <p id="score-save-message">Do you want to save your score to the leaderboard? Any unsaved score will be lost.</p>
+      </div>
+      <div class="modal-actions" id="gameover-actions">
+        <button id="save-score-btn" class="btn-primary hidden" onclick="submitScore()">Save Score</button>
+        <button id="back-main-menu-btn" class="btn-primary" onclick="goToMainMenu()">Back Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-overlay hidden" onclick="closeModal(event,'confirmModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="confirmModalTitle">Confirm Action</h2>
+        <button class="modal-close" onclick="closeConfirmModal()">✕</button>
+      </div>
+      <p id="confirmModalMessage" class="modal-body-text confirm-modal-message"></p>
+      <div class="modal-actions">
+        <button id="confirmModalConfirmBtn" class="btn-primary" type="button">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/game.js"></script>
+  <script src="/static/music.js"></script>
+  
+  <!-- A2S-241: Dashboard Fetch Script -->
+  <script>
+    function updateDashboard() {
+        // Dylan: poll the live statistics endpoint and redraw the dashboard
+        // so the player can keep watching city growth during play.
+        fetch('/api/statistics')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) return;
+                
+                const statsList = document.getElementById('stats-list');
+                let html = `
+                    <div><strong>Grid Size:</strong> ${data.grid_size}</div>
+                    <div><strong>Total Buildings:</strong> ${data.total_buildings}</div>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 8px 0;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                        <div>🏠 Res: ${data.building_breakdown['R'] || 0}</div>
+                        <div>🏭 Ind: ${data.building_breakdown['I'] || 0}</div>
+                        <div>🏢 Com: ${data.building_breakdown['C'] || 0}</div>
+                        <div>🌲 Park: ${data.building_breakdown['O'] || 0}</div>
+                        <div>🛣️ Road: ${data.building_breakdown['*'] || 0}</div>
+                    </div>
+                `;
+                if (data.mode === 'challenge') {
+                    html += `
+                      <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 8px 0;">
+                      <div><strong>Upcoming Events:</strong> ${data.upcoming_events || 0}</div>
+                      <div><strong>Active Effects:</strong> ${data.active_effects || 0}</div>
+                    `;
+                }
+                statsList.innerHTML = html;
+            })
+            .catch(error => console.error('Error loading dashboard:', error));
+    }
+
+    // Dylan: refresh the dashboard once per second to keep the on-screen
+    // city statistics up to date while the game is running.
+    // Auto-refresh the dashboard every 1 second so it is always "live"
+    setInterval(updateDashboard, 1000);
+    // Run once immediately on page load
+    setTimeout(updateDashboard, 200);
+  </script>
+</body>
+</html>
