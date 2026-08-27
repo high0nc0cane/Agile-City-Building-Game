@@ -59,7 +59,33 @@ These issues were addressed by improving communication before merging, requiring
 
 ## Screenshots
 
-Screenshots of the application and Scrum artefacts will be added to this repository.
+### Main Menu
+
+![Main menu of the city-building game](screenshots/main-menu.png)
+
+### Load Game
+
+![Load game interface](screenshots/loadgame.png)
+
+### Account Menu
+
+![Account management menu](screenshots/account-menu.png)
+
+### Leaderboard
+
+![Leaderboard interface](screenshots/leaderboard.png)
+
+### Gameplay
+
+![City-building gameplay interface](screenshots/gameplay.png)
+
+### Jira Board
+
+![Jira Sprint board used to manage the project](screenshots/jira-board.png)
+
+### Burndown Chart
+
+![Sprint burndown chart](screenshots/burndown-chart.png)
 
 ## Academic Project Notice
 
